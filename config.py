@@ -1,14 +1,10 @@
-from os import environ, path
-from dotenv import load_dotenv
-
-basedir = path.abspath(path.dirname(__file__))
-load_dotenv(path.join(basedir, '.env'))
+import os
 
 class ProdConfig():
     FLASK_ENV = 'production'
     DEBUG = False
     TESTING = False
-    SECRET_KEY = environ.get('SECRET_KEY')
+    SECRET_KEY = os.environ.get('SECRET_KEY')
 
 
 class DevConfig():
