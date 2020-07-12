@@ -3,7 +3,7 @@ from plot import create_plots
 import random
 
 app = Flask(__name__)
-app.config.from_object('config.DevConfig')
+app.config.from_object('config.ProdConfig')
 
 
 @app.route('/', methods=['GET', 'POST'])
