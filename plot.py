@@ -17,28 +17,22 @@ consumer_secret= os.environ.get('consumer_secret')
 access_token= os.environ.get('access_token')
 access_token_secret= os.environ.get('access_token_secret')
 
+pd.set_option('mode.chained_assignment', None)
+
 auth = tw.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 api = tw.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
 def get_tweets(screen_name):
     tweets = []
-    FILE_PATH = 'data/'+screen_name+'.csv'
-    if os.path.isfile(FILE_PATH):
-        df = pd.read_csv(FILE_PATH)
-        print('File found in cache.')
-        return df
 
     print('Fetching data from Twitter...')
     for tweet in tw.Cursor(api.user_timeline, screen_name=screen_name, tweet_mode="extended", include_rts=False).items(2000):
         tweets.append(tweet)
 
     # convert 'tweets' list to pandas.DataFrame
-    print(len(tweets))
+    print(len(tweets), "Tweets found.")
     df = pd.DataFrame(vars(tweets[i]) for i in range(len(tweets)))
-    df.to_csv(FILE_PATH)
-    print("Complete.")
-
     return df
     
 def get_hashtags(hashtag_array):
@@ -108,14 +102,14 @@ def top_words(df):
     stop_words.extend(['would'])
     tweet_words_nsw = [word for word in tweet_words if not word in stop_words]
 
-    return top_freq("Words", tweet_words_nsw, 10, 'Top 10 words used over all tweets')
+    return top_freq("Words", tweet_words_nsw, 10, 'Top 10 Words used in Tweets')
 
 def top_hashtags(df):
     df.hashtags.dropna().str.split('|').tolist()
     hashtags = list(itertools.chain(*df.hashtags.dropna().str.split('|').tolist()))
     hashtags = ['#'+x for x in hashtags]
 
-    return top_freq("Hashtags", hashtags, 10, 'Top 10 hashtags used over all tweets')
+    return top_freq("Hashtags", hashtags, 10, 'Top 10 Hashtags')
 
 
 def top_users(df):
@@ -123,7 +117,7 @@ def top_users(df):
     user_mentions = list(itertools.chain(*df.user_mentions.dropna().str.split('|').tolist()))
     user_mentions = ['@'+x for x in user_mentions]
 
-    return top_freq("User Mentions", user_mentions, 10, "Top 10 user mentions over all tweets")
+    return top_freq("User Mentions", user_mentions, 10, "Top 10 User Mentions")
 
 def favorite_days(df):
     days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
@@ -134,7 +128,7 @@ def favorite_days(df):
                                 hovertemplate="%{y} Tweets<extra></extra>")])
     
     fig.update_layout(
-    title="Number of tweets by day",
+    title="Number of Tweets",
     xaxis_title="Day",
     yaxis_title="Number of tweets")   
     
@@ -165,6 +159,14 @@ def tweet_sentiment(df):
 def create_plots(screen_name):
     plots = []
 
+    FILE_PATH = 'data/'+screen_name+'.json'
+
+    if os.path.isfile(FILE_PATH):
+        with open(FILE_PATH, 'r') as f:
+            plots = json.load(f)
+        
+        print('Cache found.')
+        return plots
 
     tweets = get_tweets(screen_name)
     df = construct_df(tweets)
@@ -183,5 +185,9 @@ def create_plots(screen_name):
 
     sent = tweet_sentiment(df)
     plots.append(sent)
+
+    with open(FILE_PATH, 'w') as f:
+        json.dump(plots, f)
+        print('Saving cache.')
 
     return plots

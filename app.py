@@ -9,8 +9,12 @@ app.config.from_object('config.DevConfig')
 @app.route('/', methods=['GET', 'POST'])
 def index():
     plots = []
-    screen_name = ''
+    home_page = ['@NASA', '@BarackObama', '@KingJames', '@ladygaga', 
+    '@britneyspears', '@BillGates', '@Drake']
+    screen_name = random.choice(home_page)
     error = False
+
+    plots = create_plots(screen_name)
 
     if request.method == 'POST':
         
@@ -23,7 +27,6 @@ def index():
         except:
             error = True
 
-    print(error)
     return render_template('dash.html', plots=plots, screen_name=screen_name, error=error)
 
 @app.route('/about')
@@ -31,4 +34,4 @@ def about():
     return render_template('about.html')
 
 if __name__ == '__main__':
-    app.run()
+    app.run() 

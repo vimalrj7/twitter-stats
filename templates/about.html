@@ -37,9 +37,15 @@
       src="{{ url_for('static', filename='main.js') }}"
     ></script>
 
-    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link
+      rel="stylesheet"
+      href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css"
+    />
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='main.css') }}"
+    />
   </head>
 
   <body>
@@ -62,7 +68,9 @@
           <div class="collapse navbar-collapse">
             <ul class="navbar-nav mr-auto">
               <li class="nav-item">
-                <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/"
+                  >Home <span class="sr-only">(current)</span></a
+                >
               </li>
               <li class="nav-item active">
                 <a class="nav-link" href="/about">About</a>
@@ -77,27 +85,34 @@
       <div class="container">
         <h1 class="mt-5">About Twitter Stats</h1>
         <p class="lead">
-            I built Twitter Stats to learn about building interactive data science tools. 
-            It was built using <b>Flask</b>, <b>Bootstrap</b>, <b>Plotly.js</b> and data science libraries such as<b> Pandas</b> and <b>NLTK</b>.
-            The tweet data is collected using <b>Tweepy</b>. The website has been deployed on <b>Heroku</b>.
+          I built Twitter Stats to learn about building interactive data science
+          tools. It was built using <b>Flask</b>, <b>Bootstrap</b>,
+          <b>Plotly.js</b> and data science libraries such as<b> Pandas</b> and
+          <b>NLTK</b>. The tweet data is collected using <b>Tweepy</b>. The
+          website has been deployed on <b>Heroku</b>.
         </p>
         <p>
-            Visit me on <a href="https://www.github.com/vimalrj7">GitHub</a> or <a href="https://www.linkedin.com/in/vimalrj">LinkedIn</a>!
+          Visit me on <a href="https://www.github.com/vimalrj7">GitHub</a> or
+          <a href="https://www.linkedin.com/in/vimalrj">LinkedIn</a>!
         </p>
       </div>
     </main>
 
     <footer class="footer text-center">
-        <div class="container-fluid">
-        <div class=row>
-        <div class="col-sm-6">
-          <span class="text-muted">Built by Vimal Raj</span>
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-sm-6">
+            <span class="text-muted">Built by Vimal Raj</span>
+          </div>
+          <div class="col-sm-6">
+            <span
+              ><a href="https://www.github.com/vimalrj7/twitter-stats"
+                ><i class="fa fa-github" aria-hidden="true"></i>GitHub</a
+              ></span
+            >
+          </div>
         </div>
-        <div class="col-sm-6">
-          <span><a href="https://www.github.com/vimalrj7/twitter-stats"><i class="fa fa-github" aria-hidden="true"></i>GitHub</a></span>
-        </div>
-        </div>
-        </div>
-      </footer>
+      </div>
+    </footer>
   </body>
 </html>
