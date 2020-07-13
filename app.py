@@ -11,10 +11,9 @@ def index():
     plots = []
     home_page = ['@NASA', '@BarackObama', '@KingJames', '@ladygaga', 
     '@britneyspears', '@BillGates', '@Drake']
-    screen_name = random.choice(home_page)
+    screen_name = ''
+    
     error = False
-
-    plots = create_plots(screen_name)
 
     if request.method == 'POST':
         
@@ -26,6 +25,9 @@ def index():
             plots = create_plots(screen_name)
         except:
             error = True
+    else:
+        screen_name = random.choice(home_page)
+        plots = create_plots(screen_name)
 
     return render_template('dash.html', plots=plots, screen_name=screen_name, error=error)
 

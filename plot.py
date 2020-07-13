@@ -27,7 +27,7 @@ def get_tweets(screen_name):
     tweets = []
 
     print('Fetching data from Twitter...')
-    for tweet in tw.Cursor(api.user_timeline, screen_name=screen_name, tweet_mode="extended", include_rts=False).items(2000):
+    for tweet in tw.Cursor(api.user_timeline, screen_name=screen_name, tweet_mode="extended", include_rts=False).items(1000):
         tweets.append(tweet)
 
     # convert 'tweets' list to pandas.DataFrame
