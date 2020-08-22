@@ -74,7 +74,6 @@ def top_freq(name, type, count, title):
 
     top_freq_df = pd.DataFrame(top_freq, columns=[name, 'freq'])
 
-    #fig = px.bar(top_freq_df, x='Words', y='freq', hovertemplate='Hi!')
     fig = go.Figure(data=[go.Bar(x=top_freq_df[name], y=top_freq_df['freq'], 
                                 hovertemplate="Used %{y} times<extra></extra>")])
     
@@ -128,7 +127,7 @@ def favorite_days(df):
                                 hovertemplate="%{y} Tweets<extra></extra>")])
     
     fig.update_layout(
-    title="Number of Tweets",
+    title="Number of Tweets by day of week",
     xaxis_title="Day",
     yaxis_title="Number of tweets")   
     
@@ -155,6 +154,30 @@ def tweet_sentiment(df):
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
     return graphJSON
+
+def tweet_sources(df):
+    df_sources = df[['source', 'tweet']].groupby(['source'], as_index=False).count()
+    fig = go.Figure(data=[go.Pie(labels=df_sources['source'], values=df_sources['tweet'])])
+    fig.update_layout(title='Tweet Source')
+
+    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    
+    return graphJSON
+
+def favorite_hour(df):
+    df_hours = df[['tweet']].groupby([df.date.dt.hour]).count()
+
+    fig = go.Figure(data=[go.Bar(x=df_hours.index, y=df_hours['tweet'], 
+                                hovertemplate="%{y} Tweets<extra></extra>")])
+
+    fig.update_layout(
+    title="Number of Tweets by the hour of the day",
+    xaxis_title="Hour of Day",
+    yaxis_title="Number of tweets")   
+
+    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+    return graphJSON
     
 def create_plots(screen_name):
     plots = []
@@ -174,17 +197,23 @@ def create_plots(screen_name):
     words = top_words(df)
     plots.append(words)
 
+    sources = tweet_sources(df)
+    plots.append(sources)
+
     hashtags = top_hashtags(df)
     plots.append(hashtags)
 
     users = top_users(df)
     plots.append(users)
 
+    sent = tweet_sentiment(df)
+    plots.append(sent)
+
     days = favorite_days(df)
     plots.append(days)
 
-    sent = tweet_sentiment(df)
-    plots.append(sent)
+    hour = favorite_hour(df)
+    plots.append(hour)
 
     with open(FILE_PATH, 'w') as f:
         json.dump(plots, f)
